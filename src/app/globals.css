@@ -560,5 +560,29 @@ a.glass, a.rounded-full, .glass a {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Responsive Layout Fixes to Prevent Segment Overlaps across All Viewports */
+.process-pills-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.85rem 0.75rem !important;
+  align-items: center !important;
+}
 
+.process-pills-container > div {
+  display: inline-flex !important;
+  margin-bottom: 0.35rem !important;
+}
 
+.process-pills-container .glass {
+  display: inline-flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+
+/* Ensure all flex wrappers on mobile have clean row gaps */
+@media (max-width: 768px) {
+  .flex-wrap {
+    flex-wrap: wrap !important;
+    row-gap: 0.75rem !important;
+  }
+}
