@@ -133,6 +133,56 @@ export default function FormHandler() {
 
     const originalHTML = contactForm.innerHTML;
 
+    // ── Prefill form fields from URL Query Parameters ─────────────────────
+    const prefillFormFromURL = (form) => {
+      if (!form) return;
+      const params = new URLSearchParams(window.location.search);
+      const rawServiceParam = params.get('service') || params.get('plan') || params.get('package') || params.get('interest');
+
+      if (rawServiceParam) {
+        const decodedParam = decodeURIComponent(rawServiceParam).trim();
+        const selectEl = form.querySelector('[data-testid="contact-interest"]');
+        const detailsInput = form.querySelector('[data-testid="contact-details"]');
+
+        // Map specific package names (e.g. "Branding - Growth", "SEO - Starter") to the main dropdown categories
+        let matchedOptionValue = '';
+        const lowerParam = decodedParam.toLowerCase();
+
+        if (lowerParam.includes('branding') || lowerParam.includes('logo')) {
+          matchedOptionValue = 'Branding & Creative Studio';
+        } else if (lowerParam.includes('website') || lowerParam.includes('web')) {
+          matchedOptionValue = 'Web Development';
+        } else if (lowerParam.includes('video') || lowerParam.includes('reel') || lowerParam.includes('ai content')) {
+          matchedOptionValue = 'AI Content';
+        } else if (lowerParam.includes('seo') || lowerParam.includes('growth') || lowerParam.includes('ugc')) {
+          matchedOptionValue = 'Digital Growth & Performance';
+        } else if (lowerParam.includes('wedding')) {
+          matchedOptionValue = 'Wedding Stationery';
+        }
+
+        // 1. Prefill the Select Dropdown
+        if (selectEl) {
+          if (matchedOptionValue) {
+            selectEl.value = matchedOptionValue;
+          } else {
+            // Try exact option match
+            Array.from(selectEl.options).forEach((opt) => {
+              if (opt.value.toLowerCase() === lowerParam || opt.text.toLowerCase() === lowerParam) {
+                selectEl.value = opt.value;
+              }
+            });
+          }
+        }
+
+        // 2. Prefill Project Details Textarea with Package Info
+        if (detailsInput && !detailsInput.value) {
+          detailsInput.value = `Hi Drift team,\n\nI am interested in getting started with the [ ${decodedParam} ] package.\n\nPlease share the next steps and timeline for this project.`;
+        }
+      }
+    };
+
+    prefillFormFromURL(contactForm);
+
     const bindFormEvents = () => {
       const form = document.querySelector('[data-testid="contact-form"]');
       if (!form) return;
