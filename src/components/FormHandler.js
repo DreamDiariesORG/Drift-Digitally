@@ -6,7 +6,7 @@ import { BLOG_CONTENT, BLOG_CONTENT_FALLBACK } from "@/lib/blogContent";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const ACTIVE_TAB_CLASSES = ["bg-cream", "text-ink", "border-cream"];
+const ACTIVE_TAB_CLASSES = ["bg-royal", "text-white", "border-royal"];
 const INACTIVE_TAB_CLASSES = ["border-white/15", "text-cream/60", "hover:border-cream/40"];
 const CTA_TESTIDS = new Set([
   "hero-primary-cta",
@@ -288,7 +288,8 @@ function useNewsletterForm() {
 
 function useCategoryFilter() {
   useEffect(() => {
-    const categoryFilter = document.querySelector('[data-testid="category-filter"]');
+    const categoryFilter = document.querySelector('[data-testid="category-filter"]') ||
+                           document.querySelector('[data-testid="blog-categories"]');
     if (!categoryFilter) return;
 
     const isBlog = document.querySelectorAll('[data-testid="blog-card"]').length > 0;
@@ -307,8 +308,32 @@ function useCategoryFilter() {
 
       document.querySelectorAll(cardSelector).forEach((card) => {
         const target = isPortfolio ? card.parentElement : card;
-        const badgeText = card.querySelector('[class*="text-royal"]')?.textContent.trim() ?? "";
-        target.style.display = category === "All" || badgeText === category ? "" : "none";
+        if (category === "All") {
+          target.style.display = "";
+          return;
+        }
+
+        // Get text from all badges or spans inside card
+        const cardText = card.textContent.trim();
+        const normCat = category.toLowerCase();
+
+        // Match category keywords against card content
+        let isMatch = false;
+        if (normCat.includes("growth") || normCat.includes("performance")) {
+          isMatch = cardText.toLowerCase().includes("growth") || cardText.toLowerCase().includes("performance") || cardText.toLowerCase().includes("google business");
+        } else if (normCat.includes("ai") || normCat.includes("automation")) {
+          isMatch = cardText.toLowerCase().includes("ai") || cardText.toLowerCase().includes("automation");
+        } else if (normCat.includes("branding") || normCat.includes("design")) {
+          isMatch = cardText.toLowerCase().includes("brand") || cardText.toLowerCase().includes("design") || cardText.toLowerCase().includes("illustrated");
+        } else if (normCat.includes("wedding") || normCat.includes("bespoke")) {
+          isMatch = cardText.toLowerCase().includes("wedding") || cardText.toLowerCase().includes("bespoke");
+        } else if (normCat.includes("behind") || normCat.includes("build") || normCat.includes("ecommerce") || normCat.includes("e-commerce")) {
+          isMatch = cardText.toLowerCase().includes("build") || cardText.toLowerCase().includes("jewellery") || cardText.toLowerCase().includes("shopify") || cardText.toLowerCase().includes("amazon");
+        } else {
+          isMatch = cardText.toLowerCase().includes(normCat);
+        }
+
+        target.style.display = isMatch ? "" : "none";
       });
     };
 
