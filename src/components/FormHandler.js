@@ -514,5 +514,40 @@ export default function FormHandler() {
     return () => document.removeEventListener('click', handleClick);
   }, []);
 
+  // ── 9. Services Page Package Category Switcher ──────────────────────────
+  useEffect(() => {
+    const switcher = document.querySelector('[data-testid="package-category-switcher"]');
+    if (!switcher) return;
+
+    const buttons = switcher.querySelectorAll('button');
+
+    const handleClick = (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+
+      const category = btn.dataset.category;
+      if (!category) return;
+
+      buttons.forEach((b) => {
+        b.className = 'px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-white/15 text-cream/60 hover:border-cream/40 hover:text-cream cursor-pointer';
+      });
+      btn.className = 'px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-cream text-ink border border-cream cursor-pointer';
+
+      const panels = document.querySelectorAll('[data-package-panel]');
+      panels.forEach((panel) => {
+        if (panel.dataset.packagePanel === category) {
+          panel.style.display = 'block';
+        } else {
+          panel.style.display = 'none';
+        }
+      });
+    };
+
+    switcher.addEventListener('click', handleClick);
+    return () => switcher.removeEventListener('click', handleClick);
+  }, []);
+
   return null;
 }
+
+
