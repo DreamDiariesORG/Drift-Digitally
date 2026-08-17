@@ -529,9 +529,9 @@ export default function FormHandler() {
       if (!category) return;
 
       buttons.forEach((b) => {
-        b.className = 'px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-white/15 text-cream/60 hover:border-cream/40 hover:text-cream cursor-pointer';
+        b.className = 'px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 bg-white/5 border border-white/15 text-cream/70 hover:bg-white/10 hover:text-cream cursor-pointer';
       });
-      btn.className = 'px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-cream text-ink border border-cream cursor-pointer';
+      btn.className = 'px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 bg-royal text-white border border-royal shadow-lg shadow-royal/20 cursor-pointer';
 
       const panels = document.querySelectorAll('[data-package-panel]');
       panels.forEach((panel) => {
