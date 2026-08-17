@@ -439,6 +439,48 @@ a.rounded-full,
   margin-bottom: 1.25rem;
 }
 
+.portfolio-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+}
+
+.portfolio-meta-item label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #4f63d6;
+  margin-bottom: 0.25rem;
+}
+
+.portfolio-meta-item span {
+  font-size: 0.95rem;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.portfolio-deliverables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.portfolio-deliverable-tag {
+  background: rgba(79, 99, 214, 0.15);
+  border: 1px solid rgba(79, 99, 214, 0.3);
+  color: #f4dfc6;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
+
 /* ── 5. Process Page — Large Background Step Numbers ───────────────────── */
 .process-bg-number {
   font-family: "Cormorant Garamond", serif;
@@ -2197,3 +2239,20 @@ body {
 .sf-hidden {
   display: none !important;
 }
+
+/* Contact page social handles container & section spacing fix */
+main section:has([data-testid="contact-form"]) {
+  padding-bottom: 6rem !important;
+  margin-bottom: 4rem !important;
+}
+
+main section:has([data-testid="contact-form"]) .flex-col.gap-6 {
+  padding-bottom: 4rem !important;
+}
+
+footer[data-testid="footer"] {
+  margin-top: 4rem !important;
+}
+
+
+

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { BLOG_CONTENT, BLOG_CONTENT_FALLBACK } from "@/lib/blogContent";
+import { PORTFOLIO_CONTENT, PORTFOLIO_CONTENT_FALLBACK } from "@/lib/portfolioContent";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -292,11 +293,6 @@ function useCategoryFilter() {
                            document.querySelector('[data-testid="blog-categories"]');
     if (!categoryFilter) return;
 
-    const isBlog = document.querySelectorAll('[data-testid="blog-card"]').length > 0;
-    const isPortfolio = document.querySelectorAll('[data-testid="portfolio-card"]').length > 0;
-    if (!isBlog && !isPortfolio) return;
-
-    const cardSelector = isBlog ? '[data-testid="blog-card"]' : '[data-testid="portfolio-card"]';
     const buttons = categoryFilter.querySelectorAll("button");
 
     const handleFilter = (e) => {
@@ -306,35 +302,65 @@ function useCategoryFilter() {
       const category = btn.textContent.trim();
       setTabActive(buttons, btn);
 
-      document.querySelectorAll(cardSelector).forEach((card) => {
-        const target = isPortfolio ? card.parentElement : card;
-        if (category === "All") {
-          target.style.display = "";
-          return;
-        }
+      const blogCards = document.querySelectorAll('[data-testid="blog-card"]');
+      const portfolioCards = document.querySelectorAll('[data-testid="portfolio-card"]');
 
-        // Get text from all badges or spans inside card
-        const cardText = card.textContent.trim();
-        const normCat = category.toLowerCase();
+      if (blogCards.length > 0) {
+        blogCards.forEach((card) => {
+          if (category === "All") {
+            card.style.display = "";
+            return;
+          }
 
-        // Match category keywords against card content
-        let isMatch = false;
-        if (normCat.includes("growth") || normCat.includes("performance")) {
-          isMatch = cardText.toLowerCase().includes("growth") || cardText.toLowerCase().includes("performance") || cardText.toLowerCase().includes("google business");
-        } else if (normCat.includes("ai") || normCat.includes("automation")) {
-          isMatch = cardText.toLowerCase().includes("ai") || cardText.toLowerCase().includes("automation");
-        } else if (normCat.includes("branding") || normCat.includes("design")) {
-          isMatch = cardText.toLowerCase().includes("brand") || cardText.toLowerCase().includes("design") || cardText.toLowerCase().includes("illustrated");
-        } else if (normCat.includes("wedding") || normCat.includes("bespoke")) {
-          isMatch = cardText.toLowerCase().includes("wedding") || cardText.toLowerCase().includes("bespoke");
-        } else if (normCat.includes("behind") || normCat.includes("build") || normCat.includes("ecommerce") || normCat.includes("e-commerce")) {
-          isMatch = cardText.toLowerCase().includes("build") || cardText.toLowerCase().includes("jewellery") || cardText.toLowerCase().includes("shopify") || cardText.toLowerCase().includes("amazon");
-        } else {
-          isMatch = cardText.toLowerCase().includes(normCat);
-        }
+          const cardText = card.textContent.trim().toLowerCase();
+          const normCat = category.toLowerCase();
 
-        target.style.display = isMatch ? "" : "none";
-      });
+          let isMatch = false;
+          if (normCat.includes("growth") || normCat.includes("performance")) {
+            isMatch = cardText.includes("growth") || cardText.includes("performance") || cardText.includes("google business");
+          } else if (normCat.includes("ai") || normCat.includes("automation")) {
+            isMatch = cardText.includes("ai") || cardText.includes("automation");
+          } else if (normCat.includes("branding") || normCat.includes("design")) {
+            isMatch = cardText.includes("brand") || cardText.includes("design") || cardText.includes("illustrated");
+          } else if (normCat.includes("wedding") || normCat.includes("bespoke")) {
+            isMatch = cardText.includes("wedding") || cardText.includes("bespoke");
+          } else if (normCat.includes("behind") || normCat.includes("build") || normCat.includes("ecommerce") || normCat.includes("e-commerce")) {
+            isMatch = cardText.includes("build") || cardText.includes("jewellery") || cardText.includes("shopify") || cardText.includes("amazon");
+          } else {
+            isMatch = cardText.includes(normCat);
+          }
+
+          card.style.display = isMatch ? "" : "none";
+        });
+      }
+
+      if (portfolioCards.length > 0) {
+        portfolioCards.forEach((card) => {
+          const target = card.parentElement;
+          if (category === "All") {
+            target.style.display = "";
+            return;
+          }
+
+          const cardText = card.textContent.trim().toLowerCase();
+          const normCat = category.toLowerCase();
+
+          let isMatch = false;
+          if (normCat === "branding") {
+            isMatch = cardText.includes("brand") || cardText.includes("identity") || cardText.includes("kit");
+          } else if (normCat === "web") {
+            isMatch = cardText.includes("web") || cardText.includes("site") || cardText.includes("development") || cardText.includes("shopify") || cardText.includes("ui");
+          } else if (normCat === "ads") {
+            isMatch = cardText.includes("ad") || cardText.includes("campaign") || cardText.includes("meta") || cardText.includes("google");
+          } else if (normCat === "seo") {
+            isMatch = cardText.includes("seo") || cardText.includes("growth") || cardText.includes("search") || cardText.includes("ranking") || cardText.includes("performance");
+          } else {
+            isMatch = cardText.includes(normCat);
+          }
+
+          target.style.display = isMatch ? "" : "none";
+        });
+      }
     };
 
     categoryFilter.addEventListener("click", handleFilter);
@@ -595,6 +621,119 @@ function useServicesSwitcher() {
   }, []);
 }
 
+function usePortfolioModal() {
+  const [modalData, setModalData] = useState(null);
+
+  useEffect(() => {
+    const handlePortfolioClick = (e) => {
+      // Don't open modal if interacting with before-after slider handle or slider area
+      if (e.target.closest('[data-testid="slider-handle"]') || e.target.closest('[data-testid="before-after-slider"]')) {
+        return;
+      }
+
+      const card = e.target.closest('[data-testid="portfolio-card"]');
+      if (!card) return;
+
+      const title = card.querySelector("h3")?.textContent.trim() ?? "Featured Project";
+      const category = card.querySelector('[class*="text-royal"]')?.textContent.trim() ?? "Case Study";
+      const imgUrl = card.querySelector("img")?.src ?? "";
+      const project = PORTFOLIO_CONTENT[title] ?? PORTFOLIO_CONTENT_FALLBACK;
+
+      setModalData({ title, category, imgUrl, project });
+      document.body.style.overflow = "hidden";
+    };
+
+    document.addEventListener("click", handlePortfolioClick);
+    return () => document.removeEventListener("click", handlePortfolioClick);
+  }, []);
+
+  useEffect(() => {
+    if (!modalData) return;
+    const handleEscKey = (e) => {
+      if (e.key === "Escape") {
+        setModalData(null);
+        document.body.style.overflow = "";
+      }
+    };
+    window.addEventListener("keydown", handleEscKey);
+    return () => window.removeEventListener("keydown", handleEscKey);
+  }, [modalData]);
+
+  if (!modalData) return null;
+
+  return createPortal(
+    <div className="global-modal" style={{ display: 'flex' }} onClick={(e) => {
+      if (e.target.className === 'global-modal') {
+        setModalData(null);
+        document.body.style.overflow = "";
+      }
+    }}>
+      <div className="global-modal-content">
+        <button 
+          className="global-modal-close" 
+          aria-label="Close modal" 
+          onClick={() => {
+            setModalData(null);
+            document.body.style.overflow = "";
+          }}
+        >
+          &times;
+        </button>
+        <div className="global-modal-scroll-area">
+          {modalData.imgUrl && (
+            <div className="global-modal-header-image">
+              <img src={modalData.imgUrl} alt={modalData.title} className="global-modal-image-element" />
+              <div className="global-modal-image-overlay"></div>
+              <span className="global-modal-badge">{modalData.category}</span>
+            </div>
+          )}
+          <div className="global-modal-body">
+            <h2 className="global-modal-title">{modalData.title}</h2>
+            <p className="global-modal-intro">{modalData.project.intro}</p>
+
+            <div className="portfolio-modal-grid">
+              <div className="portfolio-meta-item">
+                <label>Client</label>
+                <span>{modalData.project.client}</span>
+              </div>
+              <div className="portfolio-meta-item">
+                <label>Service</label>
+                <span>{modalData.project.service}</span>
+              </div>
+              <div className="portfolio-meta-item">
+                <label>Year</label>
+                <span>{modalData.project.year}</span>
+              </div>
+              <div className="portfolio-meta-item" style={{ gridColumn: '1 / -1' }}>
+                <label>Deliverables</label>
+                <div className="portfolio-deliverables">
+                  {modalData.project.deliverables.map((item, i) => (
+                    <span key={i} className="portfolio-deliverable-tag">{item}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="global-modal-rich-text">
+              <h3>Overview</h3>
+              <p>{modalData.project.overview}</p>
+
+              <h3>The Challenge</h3>
+              <p>{modalData.project.challenge}</p>
+
+              <h3>The Solution</h3>
+              <p>{modalData.project.solution}</p>
+
+              <div dangerouslySetInnerHTML={{ __html: modalData.project.impact }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function FormHandler() {
@@ -604,6 +743,7 @@ export default function FormHandler() {
   useCategoryFilter();
   useBeforeAfterSlider();
   const modalPortal = useInsightsModal();
+  const portfolioModalPortal = usePortfolioModal();
   usePortfolioToggle();
   useGlobalCTA();
   useServicesSwitcher();
@@ -613,6 +753,7 @@ export default function FormHandler() {
       {contactPortal}
       {newsletterPortal}
       {modalPortal}
+      {portfolioModalPortal}
     </>
   );
 }
