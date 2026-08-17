@@ -1,67 +1,57 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
+import fs   from 'fs/promises';
 import path from 'path';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * POST /api/newsletter
+ * Validates the email address and appends it to data/newsletter.json
+ * if it is not already subscribed. Duplicate checks are case-insensitive.
+ */
 export async function POST(request) {
   try {
-    const data = await request.json();
-    const { email } = data;
+    const { email } = await request.json();
 
-    // Simple email regex validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || !emailRegex.test(email)) {
+    if (!email || !EMAIL_REGEX.test(email)) {
       return NextResponse.json(
         { success: false, message: 'Please enter a valid email address.' },
         { status: 400 }
       );
     }
 
-    const subscription = {
-      id: Date.now().toString(),
-      email,
-      subscribedAt: new Date().toISOString()
-    };
-
-    // Ensure data directory exists
-    const dataDir = path.join(process.cwd(), 'data');
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
-
-    // Read existing newsletter subscriptions
+    const dataDir  = path.join(process.cwd(), 'data');
     const filepath = path.join(dataDir, 'newsletter.json');
+
+    await fs.mkdir(dataDir, { recursive: true });
+
+    // Read existing subscriptions (tolerates missing or corrupt file)
     let subscriptions = [];
-    if (fs.existsSync(filepath)) {
-      try {
-        const fileContent = fs.readFileSync(filepath, 'utf8');
-        subscriptions = JSON.parse(fileContent);
-      } catch (err) {
-        console.error('Error parsing newsletter.json, resetting file:', err);
-      }
+    try {
+      const raw    = await fs.readFile(filepath, 'utf8');
+      subscriptions = JSON.parse(raw);
+    } catch {
+      // File absent or unreadable — start fresh
     }
 
-    // Check for duplicate subscription
-    const alreadySubscribed = subscriptions.some(s => s.email.toLowerCase() === email.toLowerCase());
-    if (alreadySubscribed) {
-      return NextResponse.json({
-        success: true,
-        message: 'You are already subscribed!'
-      });
+    // Deduplicate (case-insensitive)
+    const lowerEmail = email.toLowerCase();
+    if (subscriptions.some((s) => s.email.toLowerCase() === lowerEmail)) {
+      return NextResponse.json({ success: true, message: 'You are already subscribed!' });
     }
 
-    subscriptions.push(subscription);
-
-    // Save back to file
-    fs.writeFileSync(filepath, JSON.stringify(subscriptions, null, 2));
-
-    console.log('New newsletter subscription saved:', subscription);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Subscription saved successfully!'
+    subscriptions.push({
+      id:           Date.now().toString(),
+      email,
+      subscribedAt: new Date().toISOString(),
     });
+
+    await fs.writeFile(filepath, JSON.stringify(subscriptions, null, 2));
+    console.log('Newsletter subscription saved:', email);
+
+    return NextResponse.json({ success: true, message: 'Subscription saved successfully!' });
   } catch (error) {
-    console.error('API Newsletter Error:', error);
+    console.error('POST /api/newsletter error:', error);
     return NextResponse.json(
       { success: false, message: 'Internal Server Error.' },
       { status: 500 }

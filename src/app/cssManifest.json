@@ -1,0 +1,10 @@
+{
+  "home": "/styles/page-home.css",
+  "about": "/styles/page-about.css",
+  "services": "/styles/page-services.css",
+  "process": "/styles/page-process.css",
+  "portfolio": "/styles/page-portfolio.css",
+  "industries": "/styles/page-industries.css",
+  "insights": "/styles/page-insights.css",
+  "contact": "/styles/page-contact.css"
+}
