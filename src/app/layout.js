@@ -4,6 +4,11 @@ export const metadata = {
   title: "Drift Digitally",
   description:
     "Drift Digitally — We Build Brands That Grow, Look Premium, and Never Blend In.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({ children }) {

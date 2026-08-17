@@ -336,9 +336,8 @@ function useCategoryFilter() {
 
       if (portfolioCards.length > 0) {
         portfolioCards.forEach((card) => {
-          const target = card.parentElement;
           if (category === "All") {
-            target.style.display = "";
+            card.style.display = "";
             return;
           }
 
@@ -358,7 +357,7 @@ function useCategoryFilter() {
             isMatch = cardText.includes(normCat);
           }
 
-          target.style.display = isMatch ? "" : "none";
+          card.style.display = isMatch ? "" : "none";
         });
       }
     };
@@ -538,6 +537,7 @@ function usePortfolioToggle() {
   useEffect(() => {
     const toggleGrowth = document.querySelector('[data-testid="toggle-growth"]');
     const toggleStudio = document.querySelector('[data-testid="toggle-studio"]');
+    const categoryFilter = document.querySelector('[data-testid="category-filter"]');
     if (!toggleGrowth || !toggleStudio) return;
 
     const pill = toggleGrowth.querySelector("span.bg-royal");
@@ -545,7 +545,32 @@ function usePortfolioToggle() {
     const ACTIVE = `${BASE} text-white font-medium`;
     const INACTIVE = `${BASE} text-cream/60 hover:text-cream`;
 
-    const applyToggle = (activeBtn, inactiveBtn) => {
+    const updatePortfolioDisplay = (section) => {
+      const portfolioCards = document.querySelectorAll('[data-testid="portfolio-card"]');
+      portfolioCards.forEach((card) => {
+        const cardSection = card.dataset.section ?? "growth";
+        card.style.display = cardSection === section ? "" : "none";
+      });
+
+      if (categoryFilter) {
+        // Show category filter bar only for Digital Growth section
+        categoryFilter.style.display = section === "growth" ? "flex" : "none";
+        
+        // Reset category filter buttons state to "All" when switching back to Growth
+        if (section === "growth") {
+          const buttons = categoryFilter.querySelectorAll("button");
+          buttons.forEach((btn, idx) => {
+            if (idx === 0) {
+              btn.className = "px-4 py-2 rounded-full text-xs tracking-wide border transition-colors duration-300 bg-cream text-ink border-cream";
+            } else {
+              btn.className = "px-4 py-2 rounded-full text-xs tracking-wide border transition-colors duration-300 border-white/15 text-cream/60 hover:border-cream/40";
+            }
+          });
+        }
+      }
+    };
+
+    const applyToggle = (activeBtn, inactiveBtn, section) => {
       if (pill && !activeBtn.contains(pill))
         activeBtn.insertBefore(pill, activeBtn.firstChild);
       activeBtn.className = ACTIVE;
@@ -554,10 +579,15 @@ function usePortfolioToggle() {
       const inactiveText = inactiveBtn.querySelector(".relative");
       if (activeText) activeText.style.cssText = "position:relative;z-index:10;color:#ffffff;";
       if (inactiveText) inactiveText.style.cssText = "position:relative;z-index:10;color:rgba(244,223,198,0.6);";
+
+      updatePortfolioDisplay(section);
     };
 
-    const handleGrowthClick = () => applyToggle(toggleGrowth, toggleStudio);
-    const handleStudioClick = () => applyToggle(toggleStudio, toggleGrowth);
+    // Initial state setup (ensure growth section is active by default)
+    updatePortfolioDisplay("growth");
+
+    const handleGrowthClick = () => applyToggle(toggleGrowth, toggleStudio, "growth");
+    const handleStudioClick = () => applyToggle(toggleStudio, toggleGrowth, "studio");
 
     toggleGrowth.addEventListener("click", handleGrowthClick);
     toggleStudio.addEventListener("click", handleStudioClick);

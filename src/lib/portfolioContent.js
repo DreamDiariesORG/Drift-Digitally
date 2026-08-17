@@ -301,6 +301,74 @@ export const PORTFOLIO_CONTENT = {
   <li><strong>Tactile Craftsmanship:</strong> Hand-embossed letterpress cardstock with gold wax seals delivered globally.</li>
   <li><strong>Zero Loss Rate:</strong> Hybrid digital & physical delivery ensured every guest received their invite seamlessly.</li>
 </ul>`
+  },
+
+  "Bespoke Hand-Illustrated Wedding Suite": {
+    client: "Meera & Rohan",
+    service: "Hand-Painted Fine Art & Boxed Invites",
+    year: "2026",
+    deliverables: ["Hand-Painted Maps", "Boxed Invitation", "Foil Stamping", "Monogram Seals"],
+    results: "Featured in WedMeGood • 100% Delivery Success",
+    intro: "Crafting bespoke artisan boxed wedding invitations with hand-drawn venue maps and gold leaf detailing.",
+    overview: "Meera & Rohan wanted a physical keepsake invitation box for their palace wedding in Udaipur.",
+    challenge: "Ensuring delicate foil-stamped acrylic inserts and custom wax seals survived international postal shipping.",
+    solution: "We engineered custom rigid velvet boxes with padded interior slots and protective wax seal guards.",
+    impact: `<h3>Key Project Achievements</h3>
+<ul>
+  <li><strong>Flawless Physical Delivery:</strong> Shipped 350 luxury invitation boxes across 4 continents with zero breakage.</li>
+  <li><strong>Social Media Buzz:</strong> Unboxing videos shared widely by wedding guests on Instagram.</li>
+</ul>`
+  },
+
+  "Royal Destination Wedding & Guest Portal": {
+    client: "Kavya & Siddharth",
+    service: "Digital Video Invites & Concierge Portal",
+    year: "2026",
+    deliverables: ["3D Animated Video", "Concierge Web App", "Flight Tracking", "WhatsApp Bot"],
+    results: "350+ Guest Schedules Managed • 99.8% Guest Satisfaction",
+    intro: "Building a high-end digital invitation suite with 3D venue fly-through video and guest flight concierge.",
+    overview: "Kavya & Siddharth hosted a 3-day destination wedding in Bali and needed real-time guest schedule coordination.",
+    challenge: "Managing last-minute flight delay updates and dietary preferences for guests arriving across 15 flight routes.",
+    solution: "Created an automated WhatsApp concierge integrated with a custom Next.js guest web app.",
+    impact: `<h3>Key Project Achievements</h3>
+<ul>
+  <li><strong>Automated Concierge:</strong> Handled over 1,200 guest itinerary queries automatically without manual delay.</li>
+  <li><strong>Interactive Experience:</strong> 98% of guests completed RSVP and hotel preferences online within 7 days.</li>
+</ul>`
+  },
+
+  "Fine Art Botanical Calligraphy Suite": {
+    client: "Sophia & Julian",
+    service: "Calligraphy & Cotton Paper Print",
+    year: "2026",
+    deliverables: ["Hand Calligraphy", "Handmade Cotton Paper", "Botanical Press", "Ribbon Ties"],
+    results: "Featured in Vogue Weddings",
+    intro: "Designing vintage-inspired organic cotton paper stationery with botanical press flowers and hand calligraphy.",
+    overview: "Sophia & Julian held a vineyard wedding in Tuscany and required eco-friendly, artisan handcrafted stationery.",
+    challenge: "Maintaining consistency across 250 individually hand-lettered calligraphy envelope suites.",
+    solution: "Utilized custom ink mixing matching Italian cypress green and handmade deckle-edge rag paper.",
+    impact: `<h3>Key Project Achievements</h3>
+<ul>
+  <li><strong>Vogue Weddings Feature:</strong> Recognized in global wedding editorials for botanical print craftsmanship.</li>
+  <li><strong>100% Eco-Friendly Materials:</strong> Sourced recycled cotton fibers and organic vegetable inks.</li>
+</ul>`
+  },
+
+  "Luxe Velvet Gold Foil Event Stationery": {
+    client: "Zoya & Armaan",
+    service: "High-End Event Branding & Signage",
+    year: "2026",
+    deliverables: ["Acrylic Signage", "Menu Cards", "Seating Charts", "Monogram Wax Seals"],
+    results: "1000+ Guest Gala • Flawless Execution",
+    intro: "Creating dramatic black-and-gold acrylic event signage and velvet embossed dinner menus for a luxury reception gala.",
+    overview: "Zoya & Armaan required full event branding for a 1,000-guest grand wedding reception.",
+    challenge: "Guiding 1,000 guests smoothly to assigned banquet tables without bottleneck delays at reception entrances.",
+    solution: "Designed illuminated laser-cut acrylic seating chart pillars paired with QR code seat finder kiosks.",
+    impact: `<h3>Key Project Achievements</h3>
+<ul>
+  <li><strong>Seamless Crowd Flow:</strong> Reduced reception entry wait time by 75% for 1,000 attendees.</li>
+  <li><strong>Elevated Aesthetic:</strong> Gold foil velvet menus added a memorable tactile touch to dinner tables.</li>
+</ul>`
   }
 };
 
