@@ -126,7 +126,76 @@ export default function FormHandler() {
     return () => observer.disconnect();
   }, []);
 
-  // ── 2. Contact Form Submission ──────────────────────────────────────────
+  // ── 2. Contact Form Pre-fill from URL Params (Package CTAs) ────────────────
+  useEffect(() => {
+    // Map service URL param values to the select dropdown option values
+    const SERVICE_MAP = {
+      // Branding
+      'Branding - Starter':  'Branding & Creative Studio',
+      'Branding - Growth':   'Branding & Creative Studio',
+      'Branding - Premium':  'Branding & Creative Studio',
+      'Branding - Custom':   'Branding & Creative Studio',
+      // Website
+      'Website - Starter':   'Web Development',
+      'Website - Growth':    'Web Development',
+      'Website - Premium':   'Web Development',
+      'Website - Custom':    'Web Development',
+      // Video
+      'Video - Starter':     'AI Content',
+      'Video - Growth':      'AI Content',
+      'Video - Premium':     'AI Content',
+      'Video - Custom':      'AI Content',
+      // UGC
+      'UGC - Starter':       'AI Content',
+      'UGC - Growth':        'AI Content',
+      'UGC - Premium':       'AI Content',
+      'UGC - Custom':        'AI Content',
+      // SEO
+      'SEO - Starter':       'Digital Growth & Performance',
+      'SEO - Growth':        'Digital Growth & Performance',
+      'SEO - Premium':       'Digital Growth & Performance',
+      'SEO - Custom':        'Digital Growth & Performance',
+    };
+
+    const fillForm = () => {
+      const form = document.querySelector('[data-testid="contact-form"]');
+      if (!form) return;
+
+      const params  = new URLSearchParams(window.location.search);
+      const service = params.get('service') || params.get('package') || params.get('plan');
+      if (!service) return;
+
+      // Map to dropdown option value
+      const selectValue = SERVICE_MAP[service] || service;
+
+      // Pre-fill the interest select
+      const select = form.querySelector('[data-testid="contact-interest"]');
+      if (select) {
+        for (const opt of select.options) {
+          if (opt.value === selectValue || opt.value.toLowerCase() === selectValue.toLowerCase()) {
+            select.value = opt.value;
+            break;
+          }
+        }
+      }
+
+      // Pre-fill the details textarea with a helpful starter message
+      const details = form.querySelector('[data-testid="contact-details"]');
+      if (details && !details.value) {
+        details.value = `Hi, I'm interested in the ${service} package. Could you please share more details and get back to me?`;
+      }
+
+      // Scroll to form smoothly
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    // Run immediately and after a short delay to handle SSR hydration
+    fillForm();
+    const t = setTimeout(fillForm, 400);
+    return () => clearTimeout(t);
+  }, []);
+
+  // ── 3. Contact Form Submission ──────────────────────────────────────────
   useEffect(() => {
     const contactForm = document.querySelector('[data-testid="contact-form"]');
     if (!contactForm) return;
