@@ -250,11 +250,9 @@ a {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Fix for button links behaving as inline-flex */
-a.glass.rounded-full, a.rounded-full {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+/* Fix for inline links behaving as inline-block to prevent overlap when wrapped */
+a.glass, a.rounded-full, .glass a {
+  display: inline-block !important;
 }
 
 /* Premium Modal Styles */
@@ -589,25 +587,11 @@ a.glass.rounded-full, a.rounded-full {
   }
 }
 
-/* Fix for inline links behaving as inline-flex to prevent overlap when wrapped */
-a.rounded-full {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-/* Glass containers must ALWAYS allow normal text wrapping */
-.glass {
-  white-space: normal !important;
-  word-break: normal !important;
-}
-
-/* Universal Button & Arrow Alignment Rules (Scoped strictly to Buttons & Badges) */
-button, a.inline-flex, a.global-cta-button, [data-testid*="-cta"] {
+/* Universal Button & Arrow Alignment Rules — SCOPED to buttons/links only, NOT .glass cards */
+button.whitespace-nowrap,
+a.inline-flex.whitespace-nowrap,
+[data-testid*="-cta"] {
   white-space: nowrap !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
 }
 
 button svg, a svg, [data-testid*="-cta"] svg {
