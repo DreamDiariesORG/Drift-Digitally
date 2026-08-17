@@ -126,76 +126,7 @@ export default function FormHandler() {
     return () => observer.disconnect();
   }, []);
 
-  // ── 2. Contact Form Pre-fill from URL Params (Package CTAs) ────────────────
-  useEffect(() => {
-    // Map service URL param values to the select dropdown option values
-    const SERVICE_MAP = {
-      // Branding
-      'Branding - Starter':  'Branding & Creative Studio',
-      'Branding - Growth':   'Branding & Creative Studio',
-      'Branding - Premium':  'Branding & Creative Studio',
-      'Branding - Custom':   'Branding & Creative Studio',
-      // Website
-      'Website - Starter':   'Web Development',
-      'Website - Growth':    'Web Development',
-      'Website - Premium':   'Web Development',
-      'Website - Custom':    'Web Development',
-      // Video
-      'Video - Starter':     'AI Content',
-      'Video - Growth':      'AI Content',
-      'Video - Premium':     'AI Content',
-      'Video - Custom':      'AI Content',
-      // UGC
-      'UGC - Starter':       'AI Content',
-      'UGC - Growth':        'AI Content',
-      'UGC - Premium':       'AI Content',
-      'UGC - Custom':        'AI Content',
-      // SEO
-      'SEO - Starter':       'Digital Growth & Performance',
-      'SEO - Growth':        'Digital Growth & Performance',
-      'SEO - Premium':       'Digital Growth & Performance',
-      'SEO - Custom':        'Digital Growth & Performance',
-    };
-
-    const fillForm = () => {
-      const form = document.querySelector('[data-testid="contact-form"]');
-      if (!form) return;
-
-      const params  = new URLSearchParams(window.location.search);
-      const service = params.get('service') || params.get('package') || params.get('plan');
-      if (!service) return;
-
-      // Map to dropdown option value
-      const selectValue = SERVICE_MAP[service] || service;
-
-      // Pre-fill the interest select
-      const select = form.querySelector('[data-testid="contact-interest"]');
-      if (select) {
-        for (const opt of select.options) {
-          if (opt.value === selectValue || opt.value.toLowerCase() === selectValue.toLowerCase()) {
-            select.value = opt.value;
-            break;
-          }
-        }
-      }
-
-      // Pre-fill the details textarea with a helpful starter message
-      const details = form.querySelector('[data-testid="contact-details"]');
-      if (details && !details.value) {
-        details.value = `Hi, I'm interested in the ${service} package. Could you please share more details and get back to me?`;
-      }
-
-      // Scroll to form smoothly
-      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
-
-    // Run immediately and after a short delay to handle SSR hydration
-    fillForm();
-    const t = setTimeout(fillForm, 400);
-    return () => clearTimeout(t);
-  }, []);
-
-  // ── 3. Contact Form Submission ──────────────────────────────────────────
+  // ── 2. Contact Form Submission ──────────────────────────────────────────
   useEffect(() => {
     const contactForm = document.querySelector('[data-testid="contact-form"]');
     if (!contactForm) return;
@@ -597,10 +528,14 @@ export default function FormHandler() {
       const category = btn.dataset.category;
       if (!category) return;
 
+      // Use dedicated CSS class names — Tailwind purges utility strings not
+      // present in static HTML/JSX, so they disappear from production builds.
       buttons.forEach((b) => {
-        b.className = 'px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 bg-white/5 border border-white/15 text-cream/70 hover:bg-white/10 hover:text-cream cursor-pointer';
+        b.classList.remove('tab-btn-active');
+        b.classList.add('tab-btn-inactive');
       });
-      btn.className = 'px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 bg-royal text-white border border-royal shadow-lg shadow-royal/20 cursor-pointer';
+      btn.classList.remove('tab-btn-inactive');
+      btn.classList.add('tab-btn-active');
 
       const panels = document.querySelectorAll('[data-package-panel]');
       panels.forEach((panel) => {
