@@ -227,6 +227,20 @@ a {
   font-size: 2rem; /* text-3xl equivalent */
   transition: color 0.3s ease;
   text-decoration: none;
+  /* CRITICAL: must be block so links stack vertically inside the flex-col menu */
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+/* Mobile menu nav: ensure vertical stacking */
+.global-mobile-menu nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0 1.5rem;
 }
 
 .global-mobile-link-active {
@@ -2254,5 +2268,407 @@ footer[data-testid="footer"] {
   margin-top: 4rem !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+ * ── MOBILE RESPONSIVENESS OVERRIDES ────────────────────────────────────────
+ * Comprehensive fixes for all pages on viewport widths ≤ 767px (mobile)
+ * and ≤ 1023px (tablet). Mobile-first, no !important abuse — scoped tightly.
+ * ═══════════════════════════════════════════════════════════════════════════ */
 
+/* ─── Viewport / Root ────────────────────────────────────────────────────── */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
 
+/* Ensure images never overflow their containers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─── All pages: section padding / horizontal padding ────────────────────── */
+@media (max-width: 767px) {
+  /* Make all page sections use comfortable mobile padding */
+  section,
+  [class*="max-w-[1400px]"],
+  [class*="mx-auto"] {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  /* Hero sections: reduce extreme top padding */
+  .pt-40, [class*="pt-40"] { padding-top: 7rem !important; }
+  .pt-48, [class*="pt-48"] { padding-top: 8rem !important; }
+  .pt-32, [class*="pt-32"] { padding-top: 6rem !important; }
+  .py-24, [class*="py-24"] { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+  .pb-24, [class*="pb-24"] { padding-bottom: 4rem !important; }
+  .py-32, [class*="py-32"] { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+  .pb-32, [class*="pb-32"] { padding-bottom: 5rem !important; }
+  .pt-20, [class*="pt-20"] { padding-top: 3rem !important; }
+  .pb-20, [class*="pb-20"] { padding-bottom: 3rem !important; }
+  .p-20, [class*="p-20"]   { padding: 2rem !important; }
+  .p-10, [class*="p-10"]   { padding: 1.25rem !important; }
+  .p-8,  [class*="p-8"]    { padding: 1.25rem !important; }
+
+  /* ─── Typography Scale-Down ──────────────────────────────────────────── */
+  /* Hero / display headings */
+  .text-\[13vw\]    { font-size: 12vw !important; }
+  .text-\[9vw\]     { font-size: 10vw !important; }
+  .text-\[7\.2rem\] { font-size: 3rem !important; }
+  .text-\[6rem\]    { font-size: 2.75rem !important; }
+  .text-7xl         { font-size: 2.75rem !important; line-height: 1.05 !important; }
+  .text-6xl         { font-size: 2.25rem !important; line-height: 1.1  !important; }
+  .text-5xl         { font-size: 2rem    !important; line-height: 1.15 !important; }
+  .text-4xl         { font-size: 1.75rem !important; line-height: 1.2  !important; }
+  .text-3xl         { font-size: 1.5rem  !important; line-height: 1.25 !important; }
+  .text-2xl         { font-size: 1.25rem !important; }
+
+  /* ─── Grid Overrides ─────────────────────────────────────────────────── */
+  /* Any 2-col or 3-col grid without explicit mobile override → single col (except footer nav grid) */
+  .grid-cols-2:not([class*="sm:grid-cols"]):not([class*="md:grid-cols"]):not(.gap-x-8) {
+    grid-template-columns: 1fr !important;
+  }
+  .site-footer-inner .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .grid-cols-3:not([class*="sm:grid-cols"]):not([class*="md:grid-cols"]) {
+    grid-template-columns: 1fr !important;
+  }
+  .grid-cols-4:not([class*="sm:grid-cols"]):not([class*="md:grid-cols"]) {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* ─── Flex layouts: force column stacking ────────────────────────────── */
+  /* Process timeline steps, about columns, etc. */
+  [class*="md:flex-row"]:not([class*="flex-col"]) {
+    flex-direction: column !important;
+  }
+  [class*="lg:flex-row"]:not([class*="flex-col"]) {
+    flex-direction: column !important;
+  }
+
+  /* ─── Contact Page ───────────────────────────────────────────────────── */
+  /* Main 2-col grid on contact → stack vertically */
+  [data-testid="contact-form"] ~ div,
+  [data-testid="contact-form"],
+  section[class*="lg:grid-cols-2"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ─── Services Page: tab overflow ────────────────────────────────────── */
+  [data-testid="package-category-switcher"] {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start !important;
+    padding-bottom: 0.5rem !important;
+    gap: 0.5rem !important;
+    scrollbar-width: none;
+  }
+  [data-testid="package-category-switcher"]::-webkit-scrollbar {
+    display: none;
+  }
+  .tab-btn-active,
+  .tab-btn-inactive {
+    padding: 0.6rem 1.1rem !important;
+    font-size: 0.8rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* ─── Footer ─────────────────────────────────────────────────────────── */
+  .site-footer-inner {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    padding-top: 3rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  /* Footer hero heading */
+  .site-footer-inner h2 {
+    font-size: 2.5rem !important;
+    line-height: 1.05 !important;
+  }
+
+  /* Footer grid: always stack on mobile */
+  .site-footer-inner > div > .grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+
+  /* Newsletter input: full width on mobile */
+  .site-footer-inner form > div {
+    flex-direction: column !important;
+    border-radius: 1rem !important;
+    gap: 0.5rem !important;
+    padding: 0.75rem !important;
+  }
+  .site-footer-inner form > div input,
+  .site-footer-inner form > div button {
+    width: 100% !important;
+    border-radius: 0.5rem !important;
+    text-align: center !important;
+  }
+
+  /* ─── About: Founder Card ────────────────────────────────────────────── */
+  .founder-card-container {
+    flex-direction: column !important;
+    padding: 1.5rem !important;
+    gap: 2rem !important;
+    border-radius: 20px !important;
+  }
+  .founder-photo-col {
+    width: 100% !important;
+  }
+  .founder-photo-wrapper {
+    min-height: 320px !important;
+  }
+
+  /* ─── Process Page: step layout ─────────────────────────────────────── */
+  .process-bg-number {
+    font-size: 4.5rem !important;
+  }
+
+  /* ─── Insights / Portfolio: card grids ──────────────────────────────── */
+  /* Ensure portfolio and insights cards stack on mobile */
+  [data-testid*="portfolio"] .grid,
+  [data-testid*="insights"] .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ─── Hero CTA banner ("glass rounded-3xl") ─────────────────────────── */
+  .rounded-3xl.glass,
+  .rounded-3xl[class*="p-10"],
+  .rounded-3xl[class*="p-20"] {
+    padding: 1.5rem !important;
+    border-radius: 1.25rem !important;
+  }
+
+  /* ─── Industries pill cloud: allow wrap ─────────────────────────────── */
+  .rounded-full[class*="px-6"][class*="py-3"] {
+    padding: 0.6rem 1.1rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* ─── WhatsApp floating button ───────────────────────────────────────── */
+  a[data-testid="whatsapp-button"],
+  a[href*="wa.me"] {
+    bottom: 1rem !important;
+    right: 1rem !important;
+    padding: 0.75rem !important;
+  }
+  /* Hide the text label inside the WhatsApp button if present */
+  a[href*="wa.me"] span {
+    display: none !important;
+  }
+
+  /* ─── Modal: full-screen on small devices ───────────────────────────── */
+  .global-modal {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .global-modal-content {
+    border-radius: 1.25rem 1.25rem 0 0 !important;
+    max-height: 92vh !important;
+  }
+  .global-modal-body {
+    padding: 1.25rem 1rem !important;
+  }
+  .global-modal-header-image {
+    height: 200px !important;
+  }
+}
+
+/* ─── Tablet (768px–1023px) tweaks ──────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  section,
+  [class*="max-w-[1400px]"],
+  [class*="mx-auto"] {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+
+  .text-\[7\.2rem\] { font-size: 4.5rem !important; }
+  .text-\[6rem\]    { font-size: 3.75rem !important; }
+  .text-7xl         { font-size: 3.5rem  !important; }
+  .text-6xl         { font-size: 3rem    !important; }
+
+  /* 3-col grids → 2-col on tablet */
+  .grid-cols-3:not([class*="sm:grid-cols"]) {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Services tab overflow on tablet */
+  [data-testid="package-category-switcher"] {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Footer: stack the 2-col lg grid */
+  .site-footer-inner h2 {
+    font-size: 3.5rem !important;
+  }
+}
+
+/* ─── Fix: contact page layout grid ─────────────────────────────────────── */
+@media (max-width: 1023px) {
+  /* Contact page: the 2-col sidebar+form layout → full width */
+  [data-testid="contact-section"] > div,
+  section:has([data-testid="contact-form"]) > div {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2.5rem !important;
+  }
+
+  /* Contact info cards: 2-col grid on tablet → 1-col on mobile */
+  section:has([data-testid="contact-form"]) [class*="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── Fix: package cards on tablet ──────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .package-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* ─── Fix: custom quote banner on mobile ─────────────────────────────────── */
+@media (max-width: 767px) {
+  .custom-quote-banner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 1.5rem !important;
+    gap: 1.25rem !important;
+  }
+  .btn-custom-quote-cta {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ─── Fix: footer bottom bar stacking ───────────────────────────────────── */
+@media (max-width: 767px) {
+  .site-footer-bottom-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+  }
+  .site-footer-bottom-bar > div:last-child {
+    align-items: flex-start !important;
+  }
+}
+
+/* ─── Fix: navbar logo size on very small screens ───────────────────────── */
+@media (max-width: 380px) {
+  .global-logo-container {
+    width: 7rem !important;
+    height: 2.5rem !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * ── TARGETED MOBILE FIXES (from user review 2026-08-18) ─────────────────
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Fix 1: Industry cards — images are opacity-0 (hover-only on desktop)
+ *    On touch devices there is no hover so images never appear.
+ *    Show them at a readable opacity on mobile/touch screens.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@media (hover: none), (max-width: 767px) {
+  /* Target the industry card images that have opacity-0 + group-hover reveal */
+  [data-testid^="industry-"] img,
+  a.group img.opacity-0 {
+    opacity: 0.45 !important;
+    transform: none !important;
+  }
+  /* Keep the gradient overlay & card text always visible */
+  [data-testid^="industry-"] .bg-black\/40,
+  a.group .bg-black\/40 {
+    opacity: 1 !important;
+  }
+}
+
+/* ── Fix 2: Text / content overflow — prevent any text from breaking out of
+ *    viewport horizontally. Applies sitewide on mobile.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  h1, h2, h3, h4, h5, h6, p, span, a, li {
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+  }
+
+  /* CTA glass banner: constrain inner text box to viewport */
+  .relative.max-w-3xl,
+  .relative.max-w-2xl {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Specifically fix the "glass rounded-3xl" hero CTA sections */
+  section .glass.rounded-3xl .relative,
+  .glass.rounded-3xl .relative.max-w-3xl {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Prevent any section from causing horizontal scroll */
+  section {
+    overflow-x: hidden !important;
+  }
+}
+
+/* ── Fix 3: Mobile nav — reduce font size on extra-small viewports so all
+ *    links fit without needing to scroll the full-screen menu.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 400px) {
+  .global-mobile-link {
+    font-size: 1.6rem !important;
+  }
+}
+@media (max-height: 700px) {
+  /* Landscape or small phone — compress spacing */
+  .global-mobile-menu {
+    gap: 0.5rem !important;
+  }
+  .global-mobile-link {
+    font-size: 1.5rem !important;
+  }
+  .global-mobile-cta {
+    margin-top: 0.5rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+}
+
+/* ── Fix 4: Portfolio tab row — constrain to viewport width on mobile ──────── */
+@media (max-width: 767px) {
+  /* Portfolio section toggle row */
+  [data-testid="portfolio-toggle"] {
+    max-width: 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none;
+    padding: 0.35rem !important;
+    border-radius: 9999px !important;
+  }
+  [data-testid="portfolio-toggle"] button {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding-left: 0.85rem !important;
+    padding-right: 0.85rem !important;
+    font-size: 0.75rem !important;
+  }
+  [data-testid="portfolio-filter"] {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none;
+  }
+  [data-testid="portfolio-toggle"]::-webkit-scrollbar,
+  [data-testid="portfolio-filter"]::-webkit-scrollbar {
+    display: none;
+  }
+}
