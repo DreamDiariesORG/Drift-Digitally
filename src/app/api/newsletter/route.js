@@ -57,73 +57,73 @@ export async function POST(request) {
       );
     }
 
-    const dataDir  = path.join(process.cwd(), 'data');
-    const filepath = path.join(dataDir, 'newsletter.json');
-
-    await fs.mkdir(dataDir, { recursive: true });
-
-    // Read existing subscriptions (tolerates missing or corrupt file)
-    let subscriptions = [];
+    // ── 1. Persist subscription to data/newsletter.json (graceful on read-only serverless environments) ──
     try {
-      const raw    = await fs.readFile(filepath, 'utf8');
-      subscriptions = JSON.parse(raw);
-    } catch {
-      // File absent or unreadable — start fresh
+      const dataDir  = path.join(process.cwd(), 'data');
+      const filepath = path.join(dataDir, 'newsletter.json');
+
+      await fs.mkdir(dataDir, { recursive: true });
+
+      let subscriptions = [];
+      try {
+        const raw = await fs.readFile(filepath, 'utf8');
+        subscriptions = JSON.parse(raw);
+      } catch {
+        // File absent or unreadable — start fresh
+      }
+
+      // Deduplicate (case-insensitive)
+      const lowerEmail = email.toLowerCase();
+      if (subscriptions.some((s) => s.email && s.email.toLowerCase() === lowerEmail)) {
+        return NextResponse.json({ success: true, message: 'You are already registered with us!' });
+      }
+
+      const newSubscription = {
+        id:           Date.now().toString(),
+        email,
+        subscribedAt: new Date().toISOString(),
+      };
+
+      subscriptions.push(newSubscription);
+
+      await fs.writeFile(filepath, JSON.stringify(subscriptions, null, 2));
+      console.log('Newsletter subscription saved locally:', email);
+    } catch (fsErr) {
+      console.warn('Could not write newsletter subscription to disk (likely serverless environment):', fsErr.message);
     }
 
-    // Deduplicate (case-insensitive)
-    const lowerEmail = email.toLowerCase();
-    if (subscriptions.some((s) => s.email.toLowerCase() === lowerEmail)) {
-      return NextResponse.json({ success: true, message: 'You are already registered with us!' });
-    }
-
-    const newSubscription = {
-      id:           Date.now().toString(),
-      email,
-      subscribedAt: new Date().toISOString(),
-    };
-
-    subscriptions.push(newSubscription);
-
-    await fs.writeFile(filepath, JSON.stringify(subscriptions, null, 2));
-    console.log('Newsletter subscription saved locally:', email);
-
-    // ── Optional: Dispatch email notification via Resend ──────────────────
+    // ── 2. Send notification email via Resend ─────────────────────────────
     const resendApiKey = process.env.RESEND_API_KEY;
     let resendSuccess = false;
 
     if (resendApiKey) {
       try {
         const recipientEmail = (process.env.CONTACT_NOTIFICATION_EMAIL || 'infodriftdigitally@gmail.com').trim();
-        const fromEmail = process.env.CONTACT_FROM_EMAIL;
+        const fromEmail = (process.env.CONTACT_FROM_EMAIL || 'onboarding@resend.dev').trim();
 
-        if (fromEmail) {
-          const resendRes = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${resendApiKey}`,
-            },
-            body: JSON.stringify({
-              from: `Drift Digitally Newsletter <${fromEmail}>`,
-              to: [recipientEmail],
-              reply_to: email,
-              subject: `New Subscriber: ${email}`,
-              html: buildNewsletterEmailHtml(email),
-            }),
-          });
+        const resendRes = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${resendApiKey}`,
+          },
+          body: JSON.stringify({
+            from: `Drift Digitally Newsletter <${fromEmail}>`,
+            to: [recipientEmail],
+            reply_to: email,
+            subject: `New Subscriber: ${email}`,
+            html: buildNewsletterEmailHtml(email),
+          }),
+        });
 
-          const resendData = await resendRes.json();
-          console.log('Resend API newsletter response:', resendData);
-          if (resendRes.ok) resendSuccess = true;
-        } else {
-          console.warn('CONTACT_FROM_EMAIL not configured, skipping Resend notification.');
-        }
+        const resendData = await resendRes.json();
+        console.log('Resend API newsletter response:', resendData);
+        if (resendRes.ok) resendSuccess = true;
       } catch (emailErr) {
         console.error('Resend API error for newsletter:', emailErr);
       }
     } else {
-      console.log('RESEND_API_KEY not set — newsletter subscriber saved to data/newsletter.json.');
+      console.log('RESEND_API_KEY not set — skipped Resend notification.');
     }
 
     return NextResponse.json({
