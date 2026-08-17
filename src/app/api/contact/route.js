@@ -45,9 +45,45 @@ function buildEmailHtml({ name, email, phone, company, service, details }) {
 }
 
 /**
+ * Builds the HTML body for the client auto-acknowledgment email.
+ * @param {{ name: string, service: string }} d
+ * @returns {string} HTML string
+ */
+function buildClientConfirmationEmailHtml({ name, service }) {
+  const safeName = escapeHtml(name);
+  const safeService = escapeHtml(service);
+  return `
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#111;border:1px solid #e0e0e0;border-radius:12px;background-color:#ffffff;">
+      <div style="text-align:center;padding-bottom:16px;border-bottom:1px solid #eeeeee;">
+        <h2 style="color:#2a3ba7;margin:0;font-size:24px;">Drift Digitally</h2>
+        <p style="color:#666666;font-size:13px;margin-top:4px;">Branding, Growth & Creative Studio</p>
+      </div>
+      <div style="padding:20px 0;">
+        <h3 style="color:#111;margin-top:0;">Thank you for reaching out, ${safeName}!</h3>
+        <p style="font-size:15px;line-height:1.6;color:#333333;">
+          We have received your project inquiry regarding <strong>${safeService || 'our services'}</strong>. Our team is currently reviewing your details and will get back to you within 24 hours with a clear next step.
+        </p>
+        <div style="background-color:#f8f9fe;border-left:4px solid #2a3ba7;padding:14px 16px;margin:20px 0;border-radius:4px;">
+          <p style="margin:0;font-size:14px;color:#444444;font-style:italic;">
+            "We build work that is intentional, human, and distinctive." — Sakshi Soni, Founder
+          </p>
+        </div>
+        <p style="font-size:14px;color:#555555;">
+          Need an urgent answer? You can also message us directly on <a href="https://wa.me/919399136819" style="color:#25D366;font-weight:bold;text-decoration:none;">WhatsApp (+91 9399136819)</a>.
+        </p>
+      </div>
+      <hr style="border:none;border-top:1px solid #eeeeee;margin:16px 0;" />
+      <div style="text-align:center;font-size:12px;color:#888888;line-height:1.5;">
+        <p style="margin:0;">Drift Digitally • www.driftdigitally.com</p>
+        <p style="margin:4px 0 0 0;">This is an automated acknowledgment of your inquiry.</p>
+      </div>
+    </div>`;
+}
+
+/**
  * POST /api/contact
- * Saves the submission to data/contacts.json and optionally dispatches
- * a notification email via the Resend API.
+ * Saves the submission to data/contacts.json, dispatches an admin alert email,
+ * and sends an automated acknowledgment email to the client.
  */
 export async function POST(request) {
   try {
@@ -94,36 +130,55 @@ export async function POST(request) {
       console.error('Failed to write contact to local storage:', fsErr);
     }
 
-    // ── 2. Send notification email via Resend (optional) ─────────────────
+    // ── 2. Send notification email to Admin & Confirmation to Client ──────
     const resendApiKey = process.env.RESEND_API_KEY;
     let   resendSuccess = false;
 
     if (resendApiKey) {
       try {
-        const recipientEmail = process.env.CONTACT_NOTIFICATION_EMAIL;
-        const fromEmail = process.env.CONTACT_FROM_EMAIL;
+        const recipientEmail = (process.env.CONTACT_NOTIFICATION_EMAIL || 'infodriftdigitally@gmail.com').trim();
+        const fromEmail = (process.env.CONTACT_FROM_EMAIL || 'onboarding@resend.dev').trim();
         
-        if (!recipientEmail || !fromEmail) {
-          console.warn('CONTACT_NOTIFICATION_EMAIL or CONTACT_FROM_EMAIL not configured, skipping email notification.');
-        } else {
-          const resendRes = await fetch('https://api.resend.com/emails', {
+        // 2a. Admin Notification Email
+        const resendRes = await fetch('https://api.resend.com/emails', {
+          method:  'POST',
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${resendApiKey}`,
+          },
+          body: JSON.stringify({
+            from:     `Drift Digitally Leads <${fromEmail}>`,
+            to:       [recipientEmail],
+            reply_to: email,
+            subject:  `New Lead: ${name} (${service || 'General Inquiry'})`,
+            html:     buildEmailHtml({ name, email, phone, company, service, details }),
+          }),
+        });
+
+        const resendData = await resendRes.json();
+        console.log('Resend Admin Notification response:', resendData);
+        if (resendRes.ok) resendSuccess = true;
+
+        // 2b. Client Confirmation Email (query received acknowledgment)
+        try {
+          const clientRes = await fetch('https://api.resend.com/emails', {
             method:  'POST',
             headers: {
               'Content-Type':  'application/json',
               'Authorization': `Bearer ${resendApiKey}`,
             },
             body: JSON.stringify({
-              from:     `Drift Digitally Leads <${fromEmail}>`,
-              to:       [recipientEmail],
-              reply_to: email,
-              subject:  `New Lead: ${name} (${service || 'General Inquiry'})`,
-              html:     buildEmailHtml({ name, email, phone, company, service, details }),
+              from:     `Drift Digitally <${fromEmail}>`,
+              to:       [email],
+              subject:  `We've Received Your Query! — Drift Digitally`,
+              html:     buildClientConfirmationEmailHtml({ name, service }),
             }),
           });
 
-          const resendData = await resendRes.json();
-          console.log('Resend API response:', resendData);
-          if (resendRes.ok) resendSuccess = true;
+          const clientData = await clientRes.json();
+          console.log('Resend Client Confirmation response:', clientData);
+        } catch (clientEmailErr) {
+          console.error('Failed to send confirmation email to client:', clientEmailErr);
         }
       } catch (emailErr) {
         console.error('Resend API error:', emailErr);

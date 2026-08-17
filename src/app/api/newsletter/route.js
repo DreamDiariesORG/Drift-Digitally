@@ -94,7 +94,7 @@ export async function POST(request) {
 
     if (resendApiKey) {
       try {
-        const recipientEmail = process.env.CONTACT_NOTIFICATION_EMAIL || 'Infodriftdigitally@gmail.com';
+        const recipientEmail = (process.env.CONTACT_NOTIFICATION_EMAIL || 'infodriftdigitally@gmail.com').trim();
         const fromEmail = process.env.CONTACT_FROM_EMAIL;
 
         if (fromEmail) {
