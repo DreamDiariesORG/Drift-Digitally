@@ -2677,3 +2677,74 @@ img {
     display: none;
   }
 }
+
+/* ── 11. Ultra-Wide & 2K/4K Screen Responsiveness (1600px, 1920px, 2560px+) ─ */
+@media (min-width: 1600px) {
+  [class*="max-w-[1400px]"] {
+    max-width: 1680px !important;
+  }
+
+  .global-header nav {
+    max-width: 1680px !important;
+  }
+
+  .global-footer-inner {
+    max-width: 1680px !important;
+  }
+
+  /* Scale hero & section headings smoothly for large monitors */
+  h1, .text-5xl, .text-6xl, .text-7xl {
+    font-size: clamp(3.5rem, 5vw, 6.5rem) !important;
+  }
+
+  h2, .text-3xl, .text-4xl {
+    font-size: clamp(2.2rem, 3.5vw, 4rem) !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  [class*="max-w-[1400px]"] {
+    max-width: 1840px !important;
+  }
+
+  .global-header nav {
+    max-width: 1840px !important;
+  }
+
+  .global-footer-inner {
+    max-width: 1840px !important;
+  }
+
+  /* Increase base body and card text scaling for 2K/4K clarity */
+  body {
+    font-size: 1.125rem;
+  }
+
+  .text-lg {
+    font-size: 1.35rem !important;
+  }
+
+  .text-xl {
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (min-width: 2560px) {
+  [class*="max-w-[1400px]"] {
+    max-width: 2200px !important;
+  }
+
+  .global-header nav {
+    max-width: 2200px !important;
+  }
+
+  .global-footer-inner {
+    max-width: 2200px !important;
+  }
+
+  h1 {
+    font-size: 7.5rem !important;
+  }
+}
+
+
