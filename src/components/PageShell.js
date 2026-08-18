@@ -26,8 +26,13 @@ import DOMPurify from "isomorphic-dompurify";
 export default function PageShell({ content }) {
   return (
     <>
-      {/* Per-page CSS — HTTP-cacheable static file */}
-      {content.cssUrl && <link rel="stylesheet" href={content.cssUrl} />}
+      {/* Per-page CSS — HTTP-cacheable static file with preload to eliminate layout shifts (CLS) */}
+      {content.cssUrl && (
+        <>
+          <link rel="preload" href={content.cssUrl} as="style" />
+          <link rel="stylesheet" href={content.cssUrl} />
+        </>
+      )}
       <Navbar />
       {/* Pre-rendered page body from processedContent.json */}
       <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content.bodyHtml) }} />
