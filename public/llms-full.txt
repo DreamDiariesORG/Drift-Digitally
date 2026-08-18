@@ -1,0 +1,48 @@
+# Drift Digitally - Full Context Documentation
+
+## Company Overview
+Drift Digitally (https://driftdigitally.com) is a leading digital marketing and growth agency. Our core specialty is accelerating brand presence through strategic social media management, organic and paid audience reach, high-converting content creation, active community engagement, and search engine optimization (SEO). We also provide full-stack web development and tech solutions as part of an end-to-end digital footprint.
+
+## Core Capabilities & Offerings
+
+### 1. Social Media Management & Audience Growth (Primary Core)
+- **Account Management**: End-to-end management across Instagram, LinkedIn, YouTube, TikTok, X (Twitter), and Facebook.
+- **Reach & Engagement Optimization**: Algorithm-tailored posting schedules, hashtag & trend strategy, community management, and active audience interaction.
+- **Content Creation & Production**: High-converting short-form video scripts (Reels/Shorts), visual graphics, copy creation, carousel designs, and brand storytelling.
+- **Paid Ads & Campaign Strategy**: High-ROI social ad campaigns targeting specific user demographics and interest segments.
+
+### 2. Search Engine Optimization (SEO) & Digital Marketing (Primary Core)
+- **Technical & On-Page SEO**: Site architecture, keyword research, meta optimization, content clusters, and Core Web Vitals performance tuning.
+- **Local & Off-Page SEO**: Google Business Profile management, local citation building, authority backlinking, and brand reputation management.
+- **Conversion Rate Optimization (CRO)**: Funnel analysis, landing page copy optimization, and user journey enhancements to maximize lead conversion.
+
+### 3. Web & Technology Solutions (Secondary / Supporting Domain)
+- **Custom Website Development**: Next.js, React, and responsive website builds designed to convert social traffic into customers.
+- **E-Commerce & Digital Platforms**: Scalable online store creation, custom CMS integration, and analytics tracking setup.
+- **AI & Automation Integration**: AI-driven content workflows, automated customer inquiry responses, and CRM integrations.
+
+## Page Map & Detailed Breakdown
+
+### Services (/services)
+Full suite of social media strategy, short-form & long-form content production, engagement growth hacks, SEO packages, and web development services.
+
+### About Us (/about)
+Our agency history, marketing specialists, creative team, and methodology for helping brands dominate their niche across digital channels.
+
+### Industries Served (/industries)
+Tailored growth campaigns for D2C Brands, E-Commerce, SaaS & Tech, FinTech, Real Estate, Healthcare, and Personal Brands/Creators.
+
+### Growth Process (/process)
+1. **Audit & Strategy**: Analyzing existing social media reach, competitor positioning, target personas, and SEO health.
+2. **Content & Creative Production**: Crafting compelling visuals, videos, reels, copy, and campaign assets.
+3. **Execution & Engagement**: Publishing, community management, influencer collaboration, and active audience building.
+4. **Analytics & Scale**: Tracking reach, impressions, engagement rate, organic traffic growth, and conversion metrics to refine strategy.
+
+### Portfolio & Case Studies (/portfolio)
+Real-world growth numbers, viral campaign highlights, follower acquisition stats, SEO ranking achievements, and custom website builds.
+
+### Insights (/insights)
+Actionable guides on social media algorithm changes, organic growth tactics, SEO best practices, content strategies, and modern digital trends.
+
+### Contact Us (/contact)
+Book a growth discovery session, request a free social media or SEO audit, or discuss custom digital campaign packages.

@@ -1,0 +1,18 @@
+# Drift Digitally
+
+> Drift Digitally is a premier digital growth and social media agency specializing in organic social media management, targeted audience reach, community engagement, creative content production, and data-driven digital marketing solutions (SEO & PPC), backed by full-stack website development and custom software solutions.
+
+## Core Services & Focus Areas
+
+- [Social Media & Digital Marketing Services](https://driftdigitally.com/services): End-to-end social media strategy, viral content creation, community management, audience engagement acceleration, technical & local SEO optimization, brand positioning, and web development.
+- [About Drift Digitally](https://driftdigitally.com/about): Company mission, team expertise, brand storytelling philosophy, values, and client success track record.
+- [Industries & Target Markets](https://driftdigitally.com/industries): Tailored marketing & engagement strategies across E-Commerce, D2C Brands, FinTech, Healthcare, Real Estate, SaaS, and Creator Economy.
+- [Portfolio & Campaign Case Studies](https://driftdigitally.com/portfolio): Proven social growth statistics, reach metrics, engagement rate gains, SEO rank improvements, client showcase, and technical web projects.
+- [Our Growth Process](https://driftdigitally.com/process): 4-step framework: Audience Audit & Strategy, Content Creation & Curation, Distribution & Engagement Execution, and Performance Analytics & Optimization.
+- [Insights & Industry Trends](https://driftdigitally.com/insights): Expert articles on social algorithm updates, SEO strategies, viral content hooks, brand growth tactics, and modern digital tech.
+- [Contact & Consultation](https://driftdigitally.com/contact): Book a strategy call for social media audits, campaign proposals, SEO reviews, or custom digital agency services.
+
+## Optional & Deep Dive Resources
+
+- [Full Agency Documentation](https://driftdigitally.com/llms-full.txt): Detailed plain-text breakdown of social media management packages, growth frameworks, content strategies, SEO methodologies, and web solutions.
+- [Sitemap](https://driftdigitally.com/sitemap.xml): Complete index of website URLs for search engines and AI crawlers.

@@ -3,27 +3,30 @@ import "./globals.css";
 export const metadata = {
   metadataBase: new URL("https://driftdigitally.com"),
   title: {
-    default: "Drift Digitally | Premium Digital Agency & Web Development",
+    default: "Drift Digitally | Social Media Management & Digital Growth Agency",
     template: "%s | Drift Digitally",
   },
   description:
-    "Drift Digitally is a premier digital agency building high-performance websites, custom web applications, brand identities, and digital growth strategies that never blend in.",
+    "Drift Digitally is a premier social media management, organic reach, content creation, and SEO growth agency helping brands scale audience engagement and digital footprint.",
   keywords: [
     "Drift Digitally",
-    "Digital Agency",
-    "Web Development",
-    "UI UX Design",
-    "Brand Strategy",
-    "Digital Marketing",
-    "Drift Digitally Agency",
+    "Social Media Management",
+    "Social Media Agency",
+    "Content Creation",
+    "Digital Marketing Agency",
+    "Organic Social Reach",
+    "SEO Services",
+    "Search Engine Optimization",
+    "Web Development Agency",
+    "Brand Engagement Strategy",
   ],
   authors: [{ name: "Drift Digitally", url: "https://driftdigitally.com" }],
   creator: "Drift Digitally",
   publisher: "Drift Digitally",
   openGraph: {
-    title: "Drift Digitally | Premium Digital Agency & Web Development",
+    title: "Drift Digitally | Social Media Management & Digital Growth Agency",
     description:
-      "Drift Digitally — We Build Brands That Grow, Look Premium, and Never Blend In.",
+      "Accelerate brand reach, social engagement, viral content creation, and search engine visibility with Drift Digitally.",
     url: "https://driftdigitally.com",
     siteName: "Drift Digitally",
     images: [
@@ -31,7 +34,7 @@ export const metadata = {
         url: "https://driftdigitally.com/logo.png",
         width: 2000,
         height: 2000,
-        alt: "Drift Digitally Logo",
+        alt: "Drift Digitally Digital Growth & Social Media Agency",
       },
     ],
     locale: "en_US",
@@ -39,9 +42,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Drift Digitally | Premium Digital Agency & Web Development",
+    title: "Drift Digitally | Social Media Management & Digital Growth Agency",
     description:
-      "Drift Digitally — We Build Brands That Grow, Look Premium, and Never Blend In.",
+      "Accelerate brand reach, social engagement, viral content creation, and search engine visibility with Drift Digitally.",
     images: ["https://driftdigitally.com/logo.png"],
   },
   icons: {
@@ -55,19 +58,70 @@ export const metadata = {
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
+  alternates: {
+    canonical: "https://driftdigitally.com",
+  },
 };
 
 const jsonLdOrganization = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "MarketingAgency", "ProfessionalService"],
   name: "Drift Digitally",
   alternateName: ["DriftDigitally", "Drift Digitally Agency"],
   url: "https://driftdigitally.com",
   logo: "https://driftdigitally.com/logo.png",
   image: "https://driftdigitally.com/logo.png",
   description:
-    "Drift Digitally is a premier digital agency building high-performance websites, custom web applications, brand identities, and digital growth strategies.",
-  sameAs: [],
+    "Drift Digitally is a premier digital marketing agency specializing in social media handling, organic reach expansion, audience engagement strategies, viral content production, SEO, and full-stack web development.",
+  knowsAbout: [
+    "Social Media Management",
+    "Social Media Marketing",
+    "Audience Engagement & Growth",
+    "Content Strategy & Creation",
+    "Short-Form Video Production (Reels/Shorts)",
+    "Search Engine Optimization (SEO)",
+    "Digital Marketing Strategy",
+    "Full-Stack Web Development",
+  ],
+  areaServed: "Worldwide",
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Digital Marketing & Social Media Growth Services",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Social Media Management & Strategy",
+          description: "End-to-end multi-platform social media account management, posting, and growth execution.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Content Creation & Reels Production",
+          description: "Viral short-form scripts, carousel designs, graphic production, and visual storytelling.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "SEO & Digital Search Marketing",
+          description: "Technical, local, and content-driven Search Engine Optimization to drive organic website traffic.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Web & Digital Engineering",
+          description: "High-performance website development, custom web applications, and landing page conversion optimization.",
+        },
+      },
+    ],
+  },
 };
 
 const jsonLdWebSite = {
