@@ -127,20 +127,23 @@ function useContactForm() {
       const service = selectEl?.value || "Not Specified";
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRegex = /^[+0-9\s\-()]{7,20}$/;
       const errors = [];
 
       if (!name || name.length < 2) {
         nameInput?.classList.add("input-error");
-        errors.push("Please enter a valid name (at least 2 characters).");
+        errors.push("Please enter your name (at least 2 characters).");
       }
       if (!email || !emailRegex.test(email)) {
         emailInput?.classList.add("input-error");
         errors.push("Please enter a valid email address.");
       }
-      if (phone && !phoneRegex.test(phone)) {
-        phoneInput?.classList.add("input-error");
-        errors.push("Please enter a valid phone number.");
+      // Forgiving phone validation (allow empty, or at least 7 digits)
+      if (phone) {
+        const digits = phone.replace(/\D/g, "");
+        if (digits.length < 7) {
+          phoneInput?.classList.add("input-error");
+          errors.push("Please enter a valid phone number (at least 7 digits).");
+        }
       }
 
       if (errors.length) {
